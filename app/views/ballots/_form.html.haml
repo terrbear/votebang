@@ -1,6 +1,37 @@
 = semantic_form_for @ballot do |f|
   = f.semantic_errors
 
+  = f.input :name, input_html: {style: "font-size: 3em; height: 1em; width: 16em; text-align: center"}, wrapper_html: {style: "list-style-type: none;"}, label: false
 
-  .actions
-    = f.submit 'Save'
+  - index = 0
+  - Option.all.group_by{|o| o.choice}.sort_by{|o| o.first}.each do |choice, options|
+    %h2= choice.gsub(/\d - /, '')
+    .choice.left.btn.btn-primary{"data-choice" => choice.hash, "data-id" => options.first.id}
+      = options.first.name
+      %br
+      %img{src: options.first.img_url, width: '250px', height: '250px'}
+    .choice.right.btn.btn-danger{"data-choice" => choice.hash, "data-id" => options.last.id}
+      = options.last.name
+      %br
+      %img{src: options.last.img_url, width: '250px', height: '250px'}
+    %input{type: "hidden", name: "ballot[votes_attributes][][option_id]", value: "", id: choice.hash}
+    %br
+    %br
+    %div{style: "clear:both;"} &nbsp;
+
+
+  .actions{style: "text-align: center; font-size: 5em;"}
+    = f.submit 'Vote!', style: "font-size: 3em; height: 1em;"
+
+
+:javascript
+  $(function() {
+    $('.choice').click(function() {
+      var choice = $(this).attr("data-choice");
+      $("[data-choice=" + choice + "]").css("border", "none");
+      $("[data-choice=" + choice + "]").css("opacity", "0.5");
+      $(this).css("border", "5px solid black");
+      $(this).css("opacity", "1.0");
+      $('#' + choice).val($(this).attr("data-id"));
+    });
+  });

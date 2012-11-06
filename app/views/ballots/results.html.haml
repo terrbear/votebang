@@ -1,0 +1,19 @@
+- Option.all.group_by{|o| o.choice}.sort_by{|o| o.first}.each do |choice, options|
+  %h2= "Results for #{choice.gsub(/\d - /, '')}"
+  .choice.left.btn.btn-primary{"data-choice" => choice.hash, "data-id" => options.first.id, "data-winner" => options.first.winner?.to_s}
+    = options.first.name
+    = options.first.vote_percent
+    %img{src: options.first.img_url, width: '250px', height: '250px'}
+  .choice.right.btn.btn-danger{"data-choice" => choice.hash, "data-id" => options.last.id, "data-winner" => options.last.winner?.to_s}
+    = options.last.name
+    = options.last.vote_percent
+    %img{src: options.last.img_url, width: '250px', height: '250px'}
+
+  %br
+  %br
+  %div{style: "clear:both;"} &nbsp;
+
+:javascript
+  $(function() {
+    $('[data-winner=true]').css("border", "5px solid black");
+  });

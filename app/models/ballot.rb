@@ -10,11 +10,14 @@
 #
 
 class Ballot < ActiveRecord::Base
-  # attr_accessible :title, :body
+  attr_accessible :name, :votes_attributes
+
   belongs_to :admin_user, :foreign_key => :user_id
 
   attr_accessible :name
 
-  has_many :votes
+  has_many :votes, dependent: :destroy
+
+  accepts_nested_attributes_for :votes
 
 end

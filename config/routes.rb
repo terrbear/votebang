@@ -1,5 +1,7 @@
 Votebang::Application.routes.draw do
-  resources :ballots
+  resources :ballots do
+    get :results, on: :collection
+  end
 
   ActiveAdmin.routes(self)
 
